@@ -1,0 +1,160 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contact Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f5f5f5;
+      padding: 20px;
+    }
+    .form-box {
+      background-color: #fff;
+      padding: 25px;
+      max-width: 400px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .form-box h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .error {
+      color: red;
+      font-size: 0.9em;
+      margin-top: -10px;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+    }
+    /* Floating Modal */
+    .modal {
+      position: fixed;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #dff0d8;
+      color: #3c763d;
+      padding: 20px 30px;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      display: none;
+      z-index: 9999;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-box">
+    <h2>Contact Us</h2>
+    <form id="contactForm" novalidate>
+      <label>Name:</label>
+      <input type="text" id="name" />
+      <div class="error" id="nameError"></div>
+
+      <label>Email:</label>
+      <input type="text" id="email" />
+      <div class="error" id="emailError"></div>
+
+      <label>Subject:</label>
+      <input type="text" id="subject" />
+      <div class="error" id="subjectError"></div>
+
+      <label>Message:</label>
+      <textarea id="message" rows="5"></textarea>
+      <div class="error" id="messageError"></div>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <!-- Floating Modal -->
+  <div class="modal" id="successModal">
+    ✅ Thank you for contacting us!
+  </div>
+
+  <script>
+    const form = document.getElementById("contactForm");
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("email");
+    const subjectInput = document.getElementById("subject");
+    const messageInput = document.getElementById("message");
+
+    const nameError = document.getElementById("nameError");
+    const emailError = document.getElementById("emailError");
+    const subjectError = document.getElementById("subjectError");
+    const messageError = document.getElementById("messageError");
+
+    const successModal = document.getElementById("successModal");
+
+    function validateEmail(email) {
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return regex.test(email);
+    }
+
+    function showModal(message) {
+      successModal.textContent = message;
+      successModal.style.display = "block";
+      setTimeout(() => {
+        successModal.style.display = "none";
+      }, 3000); // Hide after 3 seconds
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      let isValid = true;
+
+      // Clear previous messages
+      nameError.textContent = "";
+      emailError.textContent = "";
+      subjectError.textContent = "";
+      messageError.textContent = "";
+
+      if (nameInput.value.trim() === "") {
+        nameError.textContent = "Name is required.";
+        isValid = false;
+      }
+
+      if (emailInput.value.trim() === "") {
+        emailError.textContent = "Email is required.";
+        isValid = false;
+      } else if (!validateEmail(emailInput.value.trim())) {
+        emailError.textContent = "Invalid email format.";
+        isValid = false;
+      }
+
+      if (subjectInput.value.trim() === "") {
+        subjectError.textContent = "Subject is required.";
+        isValid = false;
+      }
+
+      if (messageInput.value.trim() === "") {
+        messageError.textContent = "Message is required.";
+        isValid = false;
+      }
+
+      if (isValid) {
+        showModal("✅ Thank you for contacting us!");
+        form.reset();
+      }
+    });
+  </script>
+
+</body>
+</html>
+
